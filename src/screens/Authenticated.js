@@ -1,10 +1,22 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useFollows} from "../api";
 import "./Authenticated.css";
+import BanForm from "../components/BanForm";
+import {getChatClient} from "../chat";
 
-function Authenticated({ token, user_id }) {
-  const { isLoading, isError, data, error } = useFollows(token, user_id);
-  const [selected, updateSelected] = useState({});
+function Authenticated({ token, user_id, user_name }) {
+  const { isLoading, isError, data, error } = useFollows(token, user_id, user_name);
+  const [{ error: chatError, client }, updateChatState] = useState({ error: null, client: null });
+  const clientCleanup = useRef(null);
+  clientCleanup.current = client;
+  useEffect(() => {
+    return () => {
+      if (clientCleanup.current !== null) {
+        clientCleanup.current.disconnect();
+        clientCleanup.current = null;
+      }
+    }
+  }, [clientCleanup]);
 
   if (isLoading) {
     return <p>Loading follower list.....</p>;
@@ -14,56 +26,33 @@ function Authenticated({ token, user_id }) {
     return <p>Error loading follower list: {error.message}</p>;
   }
 
-  const followers = data.data;
+  // This is slightly hacky but only triggers a state update the first time.
+  getChatClient(token, user_name, data.data.map(f => f.to_name), updateChatState);
 
-  const follower_list = followers.map(follower => {
+  const loggedInAs = <p>Logged in as: {user_name}</p>;
+
+  if (chatError === null && client === null) {
     return (
-      <tr key={follower.to_id}>
-        <td>
-          <input
-            type={"checkbox"}
-            value={follower.to_id}
-            checked={selected[follower.to_id] ?? false}
-            onChange={() => updateSelected(selected => ({ ...selected, [follower.to_id]: typeof selected[follower.to_id] !== "undefined" ? !selected[follower.to_id] : true }))} />
-        </td>
-        <td>{follower.to_name}</td>
-      </tr>
-    )
-  });
+      <>
+        {loggedInAs}
+        <p>Connecting to chatserver....</p>
+      </>
+    );
+  }
 
-  // The check all checkbox is selected if all followers are in the state
-  // (it starts empty) and all checkboxes are selected.
-  const allSelected = Object.values(selected).length === followers.length && Object.values(selected).every(v => v);
+  if (chatError !== null) {
+    return (
+      <>
+        {loggedInAs}
+        <p>Error connecting to chatserver: {chatError.message}</p>
+      </>
+    );
+  }
 
   return (
     <>
-      <table className={"table-select"}>
-        <caption>Select streams to apply ban to</caption>
-        <thead>
-          <tr>
-            <th>
-              <input
-                type={"checkbox"}
-                checked={allSelected}
-                onChange={() => updateSelected(Object.fromEntries(followers.map(follower => [follower.to_id, !allSelected])))}
-              />
-            </th>
-            <th>Broadcaster</th>
-          </tr>
-        </thead>
-        <tbody>
-        {follower_list}
-        </tbody>
-      </table>
-      <p>
-        <label>
-          Username<br/>
-          <input type={"text"} />
-        </label>
-      </p>
-      <p>
-        <button className={"btn btn-primary"}>Ban</button>
-      </p>
+      {loggedInAs}
+      <BanForm chatClient={client} follows={data.data} user_name={user_name} />
     </>
   );
 }

@@ -9,6 +9,12 @@ import * as serviceWorker from './serviceWorker';
 
 const queryCache = new QueryCache();
 
+// Chat joins can cause a lot of event listeners to be added so we disable
+// that error.
+if (typeof process.setMaxListeners !== "undefined") {
+  process.setMaxListeners(0);
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <ReactQueryCacheProvider queryCache={queryCache}>

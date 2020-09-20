@@ -4,15 +4,16 @@ import { client_id, redirect_uri, scope } from '../config';
 /**
  * React hook to get the auth state for a user.
  *
- * @return {{isLoading: boolean, isError: boolean, data: {user_id: string, token: string}, error: unknown}}
+ * @return {{isLoading: boolean, isError: boolean, data: {user_id: string,
+ *   token: string}, error: unknown}}
  */
 export function useAuthState() {
   const { isLoading: isLoadingToken, isError: isErrorToken, data: token, error: errorToken } = useAccessToken();
-  const { isLoading: isLoadingId, isError: isErrorId, data: user_id, error: errorId } = useUserId(token);
+  const { isLoading: isLoadingId, isError: isErrorId, data: user, error: errorId } = useUserId(token);
   return {
     isLoading: isLoadingToken || isLoadingId,
     isError: isErrorToken || isErrorId,
-    data: { token, user_id },
+    data: { token, user: typeof user === "undefined" ? null : user },
     error: errorToken || errorId,
   };
 }
@@ -80,7 +81,7 @@ export function getAuthorizeUrl() {
  *   The token to validate.
  * @param {boolean} force
  *   Allows re-validation to be forced.
- * @return {Promise<string|null>}
+ * @return {Promise<{}|null>}
  *   The promise resolves to true when the token is valid or false when the
  *   token is invalid.
  */
@@ -90,10 +91,11 @@ async function validateToken(token, force = false) {
   // user.
   const validation_time = parseInt(localStorage.getItem('validation_time') ?? 0, 10);
   const user_id = localStorage.getItem('user_id');
+  const user_name = localStorage.getItem('user_name');
 
   // If we have recently validated and we have a user_id then we're done.
   if (!force && validation_time > (Date.now() - (60 * 60 * 1000)) && user_id !== null) {
-    return user_id;
+    return { user_id, user_name };
   }
 
   const response = await fetch("https://id.twitch.tv/oauth2/validate", {
@@ -109,10 +111,12 @@ async function validateToken(token, force = false) {
   try {
     const data = await response.json();
     let user_id = typeof data["user_id"] !== "undefined" ? data["user_id"] : null;
+    let user_name = typeof data["login"] !== "undefined" ? data["login"] : null;
 
     localStorage.setItem('user_id', user_id);
+    localStorage.setItem('user_name', user_name);
     localStorage.setItem('validation_time', Date.now().toString());
-    return user_id;
+    return user_id === null || user_name === null ? null : { user_id, user_name };
   }
   // In case of invalid JSON we return null.
   catch (e) {

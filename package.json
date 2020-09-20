@@ -14,7 +14,8 @@
     "react-dom": "^16.13.1",
     "react-query": "^2.23.0",
     "react-query-devtools": "^2.5.0",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.3",
+    "tmi.js": "https://github.com/Kingdutch/tmi.js.git#patch-1"
   },
   "scripts": {
     "start": "react-scripts start",

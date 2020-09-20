@@ -2,7 +2,7 @@ import {useQuery} from "react-query";
 import {client_id} from "../config";
 
 /**
- * Loads the channels a user follows using React query.
+ * Retrieves the username for the user.
  *
  * @param {string} access_token
  *   A valid access token.
@@ -10,8 +10,33 @@ import {client_id} from "../config";
  *   The user to fetch follows for.
  * @return {QueryResult<unknown, unknown>}
  */
-export function useFollows(access_token, user_id) {
-  return useQuery(['helix/users/follows', access_token, { from_id: user_id }], twitchApi);
+export function useUsername(access_token, user_id) {
+  return useQuery(['helix/users/follows', access_token, { from_id: user_id }], twitchApi, { staleTime: 0 });
+}
+
+/**
+ * Loads the channels a user follows using React query.
+ *
+ * @param {string} access_token
+ *   A valid access token.
+ * @param {int} user_id
+ *   The user to fetch follows for.
+ * @param {string} user_name
+ *   The name of the user to fetch follows for. Injected into the results.
+ * @return {QueryResult<unknown, unknown>}
+ */
+export function useFollows(access_token, user_id, user_name) {
+  let { isLoading, isError, data, error } = useQuery(['helix/users/follows', access_token, { from_id: user_id }], twitchApi, { staleTime: 10 * 60 * 1000 /* ms */});
+  // If we've done the loading, inject the user themselves as a follow so that
+  // they show up everywhere.
+  if (!isLoading && !isError) {
+    data = {
+      ...data,
+      data: [...data.data, { followed_at: "2020-01-01T00:00:01Z", from_id: user_id, from_name: user_name, to_id: user_id, to_name: user_name }],
+    }
+  }
+
+  return { isLoading, isError, data, error };
 }
 
 /**
@@ -44,13 +69,4 @@ async function twitchApi(endpoint, access_token = null, query = {}) {
   return data;
 }
 
-/**
- * Returns the channels a user follows.
- *
- * @param {string} user_id
- *   The user ID of the user to get a list of follows for.
- */
-export function getFollows(user_id) {
-  // GET https://api.twitch.tv/helix/users/follows?from_id=<user ID>
-}
 
