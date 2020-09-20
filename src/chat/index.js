@@ -44,11 +44,11 @@ function createChatClient(token, user_name, channels) {
     },
     // Always include the user themselves in the channel list.
     channels: [...channels, user_name],
-    // logger: {
-    //   info: () => null,
-    //   warn: console.warn,
-    //   error: console.error,
-    // }
+    logger: {
+      info: () => null,
+      warn: console.warn,
+      error: console.error,
+    }
   });
 
   return client;

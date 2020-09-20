@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { QueryCache, ReactQueryCacheProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query-devtools'
 import './index.css';
 import './tokens.css';
 import App from './App';
@@ -18,7 +17,6 @@ if (typeof process.setMaxListeners !== "undefined") {
 ReactDOM.render(
   <React.StrictMode>
     <ReactQueryCacheProvider queryCache={queryCache}>
-      <ReactQueryDevtools />
       <App />
     </ReactQueryCacheProvider>
   </React.StrictMode>,
