@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "38a361188ee0712bd91a74350f8ffa1c",
+    "revision": "8c71656743a04842499429812d66eaac",
     "url": "/twitch-ban-assist/index.html"
   },
   {
-    "revision": "140de45166e037be4d68",
+    "revision": "60e35de1b23f4231fe66",
     "url": "/twitch-ban-assist/static/css/main.1a66ccf1.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/twitch-ban-assist/static/js/2.2428f603.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "140de45166e037be4d68",
-    "url": "/twitch-ban-assist/static/js/main.2cab15c7.chunk.js"
+    "revision": "60e35de1b23f4231fe66",
+    "url": "/twitch-ban-assist/static/js/main.f74c31b2.chunk.js"
   },
   {
     "revision": "2531754a9a8d80c93ed2",

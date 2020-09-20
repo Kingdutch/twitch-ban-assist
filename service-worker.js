@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/twitch-ban-assist/precache-manifest.f1fcc86d7b58e4fa2205542c16399b51.js"
+  "/twitch-ban-assist/precache-manifest.704f1b0d2afbbdbdfc57edcea99ba91a.js"
 );
 
 self.addEventListener('message', (event) => {

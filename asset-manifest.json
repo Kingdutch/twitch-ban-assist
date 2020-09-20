@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/twitch-ban-assist/static/css/main.1a66ccf1.chunk.css",
-    "main.js": "/twitch-ban-assist/static/js/main.2cab15c7.chunk.js",
-    "main.js.map": "/twitch-ban-assist/static/js/main.2cab15c7.chunk.js.map",
+    "main.js": "/twitch-ban-assist/static/js/main.f74c31b2.chunk.js",
+    "main.js.map": "/twitch-ban-assist/static/js/main.f74c31b2.chunk.js.map",
     "runtime-main.js": "/twitch-ban-assist/static/js/runtime-main.14b63cd2.js",
     "runtime-main.js.map": "/twitch-ban-assist/static/js/runtime-main.14b63cd2.js.map",
     "static/js/2.2428f603.chunk.js": "/twitch-ban-assist/static/js/2.2428f603.chunk.js",
     "static/js/2.2428f603.chunk.js.map": "/twitch-ban-assist/static/js/2.2428f603.chunk.js.map",
     "index.html": "/twitch-ban-assist/index.html",
-    "precache-manifest.f1fcc86d7b58e4fa2205542c16399b51.js": "/twitch-ban-assist/precache-manifest.f1fcc86d7b58e4fa2205542c16399b51.js",
+    "precache-manifest.704f1b0d2afbbdbdfc57edcea99ba91a.js": "/twitch-ban-assist/precache-manifest.704f1b0d2afbbdbdfc57edcea99ba91a.js",
     "service-worker.js": "/twitch-ban-assist/service-worker.js",
     "static/css/main.1a66ccf1.chunk.css.map": "/twitch-ban-assist/static/css/main.1a66ccf1.chunk.css.map",
     "static/js/2.2428f603.chunk.js.LICENSE.txt": "/twitch-ban-assist/static/js/2.2428f603.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.14b63cd2.js",
     "static/js/2.2428f603.chunk.js",
     "static/css/main.1a66ccf1.chunk.css",
-    "static/js/main.2cab15c7.chunk.js"
+    "static/js/main.f74c31b2.chunk.js"
   ]
 }
