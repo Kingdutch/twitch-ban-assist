@@ -134,7 +134,7 @@ async function validateToken(token, force = false) {
  *   The access token from the URL or null if none was found.
  */
 function getAccessTokenFromUrl() {
-  const hash = document.location.hash;
+  const hash = window.location.hash;
   // The hash includes the # so we need at least something beyond that.
   if (hash.length <= 1) {
     return null;
@@ -145,6 +145,9 @@ function getAccessTokenFromUrl() {
   if (typeof data['access_token'] === "undefined" || typeof data['token_type'] === "undefined" || data["token_type"] !== "bearer") {
     return null;
   }
+
+  // Remove the access token from the hash so the link is safe to share.
+  window.location.hash = '';
 
   return data["access_token"];
 }
