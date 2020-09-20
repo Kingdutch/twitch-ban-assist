@@ -1,23 +1,22 @@
 {
   "files": {
-    "main.css": "/twitch-ban-assist/static/css/main.5f361e03.chunk.css",
-    "main.js": "/twitch-ban-assist/static/js/main.350f8563.chunk.js",
-    "main.js.map": "/twitch-ban-assist/static/js/main.350f8563.chunk.js.map",
+    "main.css": "/twitch-ban-assist/static/css/main.1a66ccf1.chunk.css",
+    "main.js": "/twitch-ban-assist/static/js/main.2cab15c7.chunk.js",
+    "main.js.map": "/twitch-ban-assist/static/js/main.2cab15c7.chunk.js.map",
     "runtime-main.js": "/twitch-ban-assist/static/js/runtime-main.14b63cd2.js",
     "runtime-main.js.map": "/twitch-ban-assist/static/js/runtime-main.14b63cd2.js.map",
-    "static/js/2.1eed6d29.chunk.js": "/twitch-ban-assist/static/js/2.1eed6d29.chunk.js",
-    "static/js/2.1eed6d29.chunk.js.map": "/twitch-ban-assist/static/js/2.1eed6d29.chunk.js.map",
+    "static/js/2.2428f603.chunk.js": "/twitch-ban-assist/static/js/2.2428f603.chunk.js",
+    "static/js/2.2428f603.chunk.js.map": "/twitch-ban-assist/static/js/2.2428f603.chunk.js.map",
     "index.html": "/twitch-ban-assist/index.html",
-    "precache-manifest.2f2d3ac424b63d2ecf4da65d0803dce4.js": "/twitch-ban-assist/precache-manifest.2f2d3ac424b63d2ecf4da65d0803dce4.js",
+    "precache-manifest.f1fcc86d7b58e4fa2205542c16399b51.js": "/twitch-ban-assist/precache-manifest.f1fcc86d7b58e4fa2205542c16399b51.js",
     "service-worker.js": "/twitch-ban-assist/service-worker.js",
-    "static/css/main.5f361e03.chunk.css.map": "/twitch-ban-assist/static/css/main.5f361e03.chunk.css.map",
-    "static/js/2.1eed6d29.chunk.js.LICENSE.txt": "/twitch-ban-assist/static/js/2.1eed6d29.chunk.js.LICENSE.txt",
-    "static/media/logo.svg": "/twitch-ban-assist/static/media/logo.5d5d9eef.svg"
+    "static/css/main.1a66ccf1.chunk.css.map": "/twitch-ban-assist/static/css/main.1a66ccf1.chunk.css.map",
+    "static/js/2.2428f603.chunk.js.LICENSE.txt": "/twitch-ban-assist/static/js/2.2428f603.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.14b63cd2.js",
-    "static/js/2.1eed6d29.chunk.js",
-    "static/css/main.5f361e03.chunk.css",
-    "static/js/main.350f8563.chunk.js"
+    "static/js/2.2428f603.chunk.js",
+    "static/css/main.1a66ccf1.chunk.css",
+    "static/js/main.2cab15c7.chunk.js"
   ]
 }
