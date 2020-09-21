@@ -30,7 +30,7 @@ export function getChatClient(token, user_name, channels, clientStateUpdate) {
 }
 
 function createChatClient(token, user_name, channels) {
-  let client = new Client({
+  return new Client({
     options: { debug: process.env.NODE_ENV === "development" },
     connection: {
       // Don't automatically reconnect as this case state change loops in
@@ -42,14 +42,11 @@ function createChatClient(token, user_name, channels) {
       username: user_name,
       password: `oauth:${token}`,
     },
-    // Always include the user themselves in the channel list.
-    channels: [...channels, user_name],
+    channels,
     logger: {
       info: () => null,
       warn: console.warn,
       error: console.error,
     }
   });
-
-  return client;
 }

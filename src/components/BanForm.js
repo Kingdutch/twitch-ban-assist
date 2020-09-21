@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 
 // Convert a username into a valid channel name.
 function toChannel(str) {
@@ -6,11 +6,11 @@ function toChannel(str) {
   return channel[0] === "#" ? channel : "#" + channel;
 }
 
-function BanForm({ chatClient, follows, user_name }) {
+function BanForm({ chatClient, channels, user_name }) {
+  // Create a lookup table for IRC channel to Twitch channel names.
+  const channelLookup = useMemo(() => Object.fromEntries(channels.map(c => [toChannel(c), c])), [channels]);
   // Check form state.
-  const [selected, updateSelected] = useState(() => follows.reduce((a, f) => ({...a, [f.to_name]: false }), {}),[follows]);
-  // Check mod state.
-  const [isMod, updateMod] = useState( () => ({length: 0}));
+  const [selected, updateSelected] = useState({});
   // Create event listener for join to track mod state.
   useEffect(() => {
     // Show the user we're joining channels.
@@ -19,16 +19,14 @@ function BanForm({ chatClient, follows, user_name }) {
       if (joinedUser !== user_name) {
         return;
       }
-      // Broadcasters aren't considered moderators but they have the right
-      // powers.
-      let weAreMod = chatClient.isMod(channel, user_name) || channel === toChannel(user_name);
-      updateMod(modStatus => ({...modStatus, length: modStatus.length + 1, [channel]: weAreMod}));
+      // Add the channel to our list of possible channels to select.
+      updateSelected(selected => ({...selected, [channelLookup[channel]]: false}));
     }
     chatClient.on("join", onJoin);
     return () => {
       chatClient.off("join", onJoin);
     }
-  }, [chatClient, updateMod, user_name]);
+  }, [chatClient, updateSelected, user_name, channelLookup]);
   // Keep track of the form fields.
   const [banForm, updateBanForm] = useState({target_user: '', reason: ''});
   // Keep track of the banning in progress.
@@ -45,24 +43,25 @@ function BanForm({ chatClient, follows, user_name }) {
       const channel = toChannel(streamer);
       chatClient.ban(channel, target, reason)
         .then(() => updateBanState(s => ({...s, [channel]: `Banned ${target}`})))
-        .catch((e) => updateBanState(s => ({...s, [channel]: `Error ${e.message}`})))
+        .catch((e) => updateBanState(s => ({...s, [channel]: `Error ${e}`})))
     }
   }
 
-  const allSelected = Object.entries(selected).filter(([k,_]) => isMod[toChannel(k)]).every(([_,v]) => v);
-  const mod_channel_list = follows.filter(follower => isMod[toChannel(follower.to_name)]);
-  const follower_list = mod_channel_list.map(follower => {
+  const allSelected = Object.entries(selected).every(([_,v]) => v);
+  const channel_list = channels.map(channel => {
+    const hasJoined = typeof selected[channel] !== "undefined";
     return (
-      <tr key={follower.to_id}>
+      <tr key={channel}>
         <td>
           <input
             type={"checkbox"}
-            value={follower.to_name}
-            checked={selected[follower.to_name] ?? false}
-            onChange={() => updateSelected(selected => ({ ...selected, [follower.to_name]: !selected[follower.to_name] }))} />
+            value={channel}
+            disabled={!hasJoined}
+            checked={selected[channel] ?? false}
+            onChange={() => updateSelected(selected => ({ ...selected, [channel]: !selected[channel] }))} />
         </td>
-        <td>{follower.to_name}</td>
-        <td>{banState[toChannel(follower.to_name)] ?? ''}</td>
+        <td>{channel}</td>
+        <td>{hasJoined ? (banState[toChannel(channel)] ?? '') : "Joining channel..."}</td>
       </tr>
     )
   });
@@ -77,7 +76,7 @@ function BanForm({ chatClient, follows, user_name }) {
             <input
               type={"checkbox"}
               checked={allSelected}
-              onChange={() => updateSelected(Object.fromEntries(mod_channel_list.map(follower => [follower.to_name, !allSelected])))}
+              onChange={() => updateSelected(selected => Object.fromEntries(Object.entries(selected).map(([k,_]) => [k, !allSelected])))}
             />
           </th>
           <th>Broadcaster</th>
@@ -85,9 +84,7 @@ function BanForm({ chatClient, follows, user_name }) {
         </tr>
         </thead>
         <tbody>
-        {isMod.length < follows.length
-          ? <tr><td colSpan={2}>Finding moderator channels, checked {isMod.length}/{follows.length}</td></tr>
-          : follower_list}
+        {channel_list}
         </tbody>
       </table>
       <p>

@@ -15,25 +15,18 @@ export function useUsername(access_token, user_id) {
 }
 
 /**
- * Loads the channels a user follows using React query.
+ * Loads the channels a user is a moderator in using React query.
  *
- * @param {string} access_token
- *   A valid access token.
- * @param {int} user_id
- *   The user to fetch follows for.
  * @param {string} user_name
  *   The name of the user to fetch follows for. Injected into the results.
  * @return {QueryResult<unknown, unknown>}
  */
-export function useFollows(access_token, user_id, user_name) {
-  let { isLoading, isError, data, error } = useQuery(['helix/users/follows', access_token, { from_id: user_id }], twitchApi, { staleTime: 10 * 60 * 1000 /* ms */});
-  // If we've done the loading, inject the user themselves as a follow so that
-  // they show up everywhere.
+export function useMods(user_name) {
+  let { isLoading, isError, data, error } = useQuery([user_name, 'user_follows'], getMods, { staleTime: 12 * 60 * 60 * 1000 /* 12 hours in ms */});
+  // If we've done the loading, inject the user themselves as a channel so that
+  // they show up everywhere. Broadcasters are not marked as mods by default.
   if (!isLoading && !isError) {
-    data = {
-      ...data,
-      data: [...data.data, { followed_at: "2020-01-01T00:00:01Z", from_id: user_id, from_name: user_name, to_id: user_id, to_name: user_name }],
-    }
+    data = [...data, user_name];
   }
 
   return { isLoading, isError, data, error };
@@ -69,4 +62,20 @@ async function twitchApi(endpoint, access_token = null, query = {}) {
   return data;
 }
 
+/**
+ * Fetches the channels a user is a moderator of from ModLookup.
+ * @param user_name
+ *   The user to find moderator channels for.
+ * @return {Promise<*|*[]>}
+ *   A promise that resolves to a list of channels the user is a moderator for.
+ */
+async function getMods(user_name) {
+  const result = await fetch(`https://modlookup.3v.fi/api/user-v3/${user_name}?limit=10000`);
 
+  if (!result.ok) {
+    throw new Error(result.statusText);
+  }
+
+  const data = await result.json();
+  return (data.channels || []).map(c => c.name);
+}
