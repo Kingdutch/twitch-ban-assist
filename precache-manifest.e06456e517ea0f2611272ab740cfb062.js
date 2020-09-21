@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "88123e36d229db5bbec65e1120e87d82",
+    "revision": "115ed0a4c9f7fe9a1acb0c7cc31bc621",
     "url": "/twitch-ban-assist/index.html"
   },
   {
