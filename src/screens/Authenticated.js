@@ -51,6 +51,11 @@ function Authenticated({ token, user_name }) {
 
   return (
     <>
+      <div className={"banner"}>
+        This tool uses the <a href="https://modlookup.3v.fi/" target="_blank" rel="noopener noreferrer">Mod Lookup</a> tool
+        which updates once a day. If you were recently modded in a channel
+        it may take some time to show up.
+      </div>
       {loggedInAs}
       <BanForm chatClient={client} channels={mod_channels} user_name={user_name} />
     </>
